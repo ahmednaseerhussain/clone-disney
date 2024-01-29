@@ -4,13 +4,13 @@ const Viewers = (props) => {
   return (
     <Container>
       <Wrap>
-        <img src="/images/viewers-disney.png" alt="" />
+        <img  src="/images/ptv-sport.png" alt="" />
         <video autoPlay={true} loop={true} playsInline={true}>
           <source src="/videos/1564674844-disney.mp4" type="video/mp4" />
         </video>
       </Wrap>
       <Wrap>
-        <img src="/images/viewers-pixar.png" alt="" />
+        <img src="/images/ten-sport.png" alt="" />
         <video autoPlay={true} loop={true} playsInline={true}>
           <source src="/videos/1564676714-pixar.mp4" type="video/mp4" />
         </video>

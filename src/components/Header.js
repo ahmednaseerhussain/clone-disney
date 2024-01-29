@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -9,17 +9,21 @@ import {
   setUserLoginDetails,
   setSignOutState,
 } from "../features/user/userSlice";
+import Subscription from "./subscription";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const Header = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+  const [isTrue, setState] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
+        console.log(user.uid);
         history.push("/home");
       }
     });
@@ -57,52 +61,74 @@ const Header = (props) => {
   };
 
   return (
-    <Nav>
-      <Logo>
-        <img src="/images/logo.svg" alt="Disney+" />
-      </Logo>
+    <>
+      <Nav>
+        <Logo>
+          <img src="/images/logo.png" alt="sport" />
+        </Logo>
 
-      {!userName ? (
-        <Login onClick={handleAuth}>Login</Login>
+        {!userName ? (
+          <>
+            <Login onClick={handleAuth}>Getting start</Login>
+          </>
+        ) : (
+          <>
+            <NavMenu>
+              <a href="/home">
+                <img src="/images/home-icon.svg" alt="HOME" />
+                <span>HOME</span>
+              </a>
+              <a>
+                <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
+                <span>WATCHLIST</span>
+              </a>
+              <a>
+                <img src="/images/original-icon.svg" alt="ORIGINALS" />
+                <span>ORIGINALS</span>
+              </a>
+              <a>
+                <img src="/images/movie-icon.svg" alt="MOVIES" />
+                <span>MOVIES</span>
+              </a>
+              <a>
+                <img src="/images/series-icon.svg" alt="SERIES" />
+                <span>SERIES</span>
+              </a>
+              <a>
+                <img src="/images/search-icon.svg" alt="SEARCH" />
+                <span onClick={() => setState(!isTrue)}>SEARCH</span>
+              </a>
+            </NavMenu>
+            <SignOut>
+              <UserImg src={userPhoto} alt={userName} />
+              <DropDown>
+                {/* <Rigester>Subscribe</Rigester> */}
+                <Link to="/subscription">
+                  <Register>subscription</Register>
+                </Link>
+                <span onClick={handleAuth}>Sign out</span>
+              </DropDown>
+            </SignOut>
+          </>
+        )}
+      </Nav>
+      {isTrue ? (
+        <SearchBox>
+          <input type="search" />
+        </SearchBox>
       ) : (
-        <>
-          <NavMenu>
-            <a href="/home">
-              <img src="/images/home-icon.svg" alt="HOME" />
-              <span>HOME</span>
-            </a>
-            <a>
-              <img src="/images/search-icon.svg" alt="SEARCH" />
-              <span>SEARCH</span>
-            </a>
-            <a>
-              <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
-              <span>WATCHLIST</span>
-            </a>
-            <a>
-              <img src="/images/original-icon.svg" alt="ORIGINALS" />
-              <span>ORIGINALS</span>
-            </a>
-            <a>
-              <img src="/images/movie-icon.svg" alt="MOVIES" />
-              <span>MOVIES</span>
-            </a>
-            <a>
-              <img src="/images/series-icon.svg" alt="SERIES" />
-              <span>SERIES</span>
-            </a>
-          </NavMenu>
-          <SignOut>
-            <UserImg src={userPhoto} alt={userName} />
-            <DropDown>
-              <span onClick={handleAuth}>Sign out</span>
-            </DropDown>
-          </SignOut>
-        </>
+        <span></span>
       )}
-    </Nav>
+    </>
   );
 };
+
+const SearchBox = styled.div`
+  height: auto;
+  width: 100%;
+  background-color: #090b13;
+ 
+`;
 
 const Nav = styled.nav`
   position: fixed;
@@ -120,13 +146,14 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled.a`
+  position: relative;
+  top: -4px;
   padding: 0;
   width: 80px;
   margin-top: 4px;
   max-height: 70px;
   font-size: 0;
   display: inline-block;
-
   img {
     display: block;
     width: 100%;
@@ -146,6 +173,7 @@ const NavMenu = styled.div`
   margin-left: 25px;
 
   a {
+    cursor: pointer;
     display: flex;
     align-items: center;
     padding: 0 12px;
@@ -199,6 +227,7 @@ const NavMenu = styled.div`
 `;
 
 const Login = styled.a`
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
   text-transform: uppercase;
@@ -212,6 +241,14 @@ const Login = styled.a`
     color: #000;
     border-color: transparent;
   }
+`;
+const Register = styled.div`
+  height: 48px;
+  letter-spacing: 2px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
 `;
 
 const UserImg = styled.img`
